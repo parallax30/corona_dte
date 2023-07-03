@@ -12,7 +12,7 @@ export const getQueryBoletas = async () => {
         connectString: process.env.oracle_connection_string
     })
     .then(function (connection) {
-        var OracleQry = "SELECT * FROM BOLETAS_CARGOS WHERE ESTADO =1";
+        var OracleQry = "SELECT * FROM BOLETAS_CARGOS WHERE ESTADO =1 AND ROWNUM <500";
         return connection.execute(OracleQry, [], { resultSet: false})
     .then(function (result) {
         connection.close();
