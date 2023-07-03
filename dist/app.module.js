@@ -22,7 +22,7 @@ exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [schedule_1.ScheduleModule.forRoot(),
             axios_1.HttpModule,
-            transaction_module_1.TransactionModule,
+            transaction_module_1.TransactionModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, cron_service_1.CronService, transaction_service_1.TransactionService, api_service_1.TecnobackApi],

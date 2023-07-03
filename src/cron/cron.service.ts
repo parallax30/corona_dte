@@ -7,7 +7,11 @@ import { TecnobackApi } from '../tecnoback/api.service';
 @Injectable()
 export class CronService {
 
-  tecnobackApi: TecnobackApi;
+  constructor(
+    private readonly tecnobackApi: TecnobackApi,
+  ) {}
+
+  ;
 
 
   @Cron('*/10 * * * * *')
@@ -15,7 +19,7 @@ export class CronService {
     console.log('Comienza el proceso');
 
    const result = await this.tecnobackApi.emitir();
-   console.log(result);
+   //console.log(result);
   }
 
   /*@Cron(CronExpression.EVERY_MINUTE)

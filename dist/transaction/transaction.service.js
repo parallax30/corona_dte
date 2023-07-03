@@ -13,6 +13,9 @@ let TransactionService = exports.TransactionService = class TransactionService {
     async getBoletas() {
         return await (0, transaction_oracle_1.getQueryBoletas)();
     }
+    async updateBoleta(idBoleta, folio, url) {
+        return await (0, transaction_oracle_1.setUpdateBoleta)(idBoleta);
+    }
 };
 exports.TransactionService = TransactionService = __decorate([
     (0, common_1.Injectable)()

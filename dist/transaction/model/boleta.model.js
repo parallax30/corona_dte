@@ -72,15 +72,15 @@ __decorate([
 __decorate([
     (0, graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Object)
-], Boleta.prototype, "FECHA_NOTIFICA_POSstring", void 0);
+], Boleta.prototype, "FECHA_NOTIFICA_POS", void 0);
 __decorate([
     (0, graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Object)
-], Boleta.prototype, "FECHA_NOTIFICA_SMSstring", void 0);
+], Boleta.prototype, "FECHA_NOTIFICA_SMS", void 0);
 __decorate([
     (0, graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Object)
-], Boleta.prototype, "FECHA_NOTIFICA_EMAILstring", void 0);
+], Boleta.prototype, "FECHA_NOTIFICA_EMAIL", void 0);
 __decorate([
     (0, graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
@@ -148,7 +148,7 @@ __decorate([
 __decorate([
     (0, graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Object)
-], Boleta.prototype, "FECHA_TRANSACCIONstring", void 0);
+], Boleta.prototype, "FECHA_TRANSACCION", void 0);
 __decorate([
     (0, graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)

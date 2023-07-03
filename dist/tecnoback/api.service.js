@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const axios_1 = require("axios");
 const global_service_1 = require("../global.service");
+const transaction_oracle_1 = require("../transaction/transaction.oracle");
 let TecnobackApi = exports.TecnobackApi = class TecnobackApi {
     async test() {
         config_1.ConfigModule.forRoot();
@@ -26,6 +27,7 @@ let TecnobackApi = exports.TecnobackApi = class TecnobackApi {
     }
     async getSeassionId() {
         config_1.ConfigModule.forRoot();
+        console.log('go for a new sessionId.');
         const { data } = await axios_1.default.post(process.env.base_url_tecnoback + '/get-session-id', {
             'usuario': process.env.usuario_api_tecnoback,
             'clave': process.env.clave_api_tecnoback
@@ -35,71 +37,68 @@ let TecnobackApi = exports.TecnobackApi = class TecnobackApi {
             }
         });
         global_service_1.GlobalService.sessionId = data.session_id;
+        console.log('new sessionId ' + global_service_1.GlobalService.sessionId);
         return global_service_1.GlobalService.sessionId;
     }
     async emitir() {
+        console.log(1);
+        console.log(global_service_1.GlobalService.sessionId);
         config_1.ConfigModule.forRoot();
-        if (null == global_service_1.GlobalService.sessionId) {
+        console.log(2);
+        if (undefined == global_service_1.GlobalService.sessionId) {
+            console.log('no session id');
             this.getSeassionId();
         }
-        const requestConfig = {
-            headers: {
-                'x-api-key': process.env.apikey,
-            }
-        };
-        console.log(global_service_1.GlobalService.sessionId);
-        console.log(process.env.rut_emisor_tecnoback);
-        const { data } = await axios_1.default.post(process.env.base_url_tecnoback + '/emitir', {
-            "session_id": global_service_1.GlobalService.sessionId,
-            "RUTEmisor": process.env.rut_emisor_tecnoback,
-            "RznSocRecep": "",
-            "TipoDTE": "39",
-            "FchEmis": "2023-01-17",
-            "RUTRecep": "66666666-6",
-            "IndServicio": "3",
-            "jsonDetalle": [
-                {
-                    "NroLinDet": "1",
-                    "VlrCodigo": "1",
-                    "TpoCodigo": "1",
-                    "NmbItem": "Manzanas",
-                    "QtyItem": "1.0",
-                    "UnmdItem": "UNI",
-                    "PrcItem": "1000",
-                    "DescuentoPct": "",
-                    "DescuentoMonto": "",
-                    "MontoItem": "1000",
-                    "DscItem": "Verdes",
-                    "CodItem": "",
-                    "RUTmandante": ""
-                },
-                {
-                    "NroLinDet": "1",
-                    "VlrCodigo": "1",
-                    "TpoCodigo": "1",
-                    "NmbItem": "Peras",
-                    "QtyItem": "2",
-                    "UnmdItem": "UNI",
-                    "PrcItem": "1000",
-                    "DescuentoPct": "",
-                    "DescuentoMonto": "",
-                    "MontoItem": "2000",
-                    "DscItem": "Verdes",
-                    "CodItem": "",
-                    "RUTmandante": ""
+        else {
+            console.log('sessionId ' + global_service_1.GlobalService.sessionId);
+            const requestConfig = {
+                headers: {
+                    'x-api-key': process.env.apikey,
                 }
-            ],
-            "MntExe": "0",
-            "IVA": "479",
-            "MntNeto": "2521",
-            "MntTotal": "3000",
-            "mail_mandato": "contacto@tecnoback.cl"
-        }, {
-            headers: {
-                'x-api-key': process.env.apikey_tecnoback,
-            }
-        });
-        console.log(data);
+            };
+            console.log('go to get boletas');
+            this.boletas = await (0, transaction_oracle_1.getQueryBoletas)();
+            this.boletas.forEach(async function (b) {
+                console.log(b);
+                const { data } = await axios_1.default.post(process.env.base_url_tecnoback + '/emitir', {
+                    "session_id": global_service_1.GlobalService.sessionId,
+                    "RUTEmisor": process.env.rut_emisor_tecnoback,
+                    "RznSocRecep": "",
+                    "TipoDTE": "39",
+                    "FchEmis": b.FECHA_TRANSACCION,
+                    "RUTRecep": "66666666-6",
+                    "IndServicio": "2",
+                    "jsonDetalle": [
+                        {
+                            "NroLinDet": "1",
+                            "VlrCodigo": "1",
+                            "TpoCodigo": "1",
+                            "NmbItem": b.GLOSA_BOLETA,
+                            "QtyItem": "1.0",
+                            "UnmdItem": "UNI",
+                            "PrcItem": b.MONTO_IVA,
+                            "DescuentoPct": "",
+                            "DescuentoMonto": "",
+                            "MontoItem": b.MONTO_IVA,
+                            "DscItem": "Verdes",
+                            "CodItem": "",
+                            "RUTmandante": ""
+                        }
+                    ],
+                    "MntExe": "0",
+                    "IVA": b.IVA,
+                    "MntNeto": b.MONTO_CARGO,
+                    "MntTotal": b.MONTO_IVA,
+                    "mail_mandato": b.EMAIL
+                }, {
+                    headers: {
+                        'x-api-key': process.env.apikey_tecnoback,
+                    }
+                });
+                (0, transaction_oracle_1.setUpdateBoleta)(b.ID_BOLETAS_CARGOS);
+            });
+            console.log();
+        }
     }
 };
 exports.TecnobackApi = TecnobackApi = __decorate([

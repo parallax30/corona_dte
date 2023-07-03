@@ -9,7 +9,7 @@ import { getQueryBoletas, setUpdateBoleta, setInsertBoletaDoc} from '../transact
 
 @Injectable()
 export class TecnobackApi {
-  httpService: any;
+  httpService: any; 
   boletas: Boleta[];
 
   async test(){
@@ -30,6 +30,8 @@ export class TecnobackApi {
   async getSeassionId() {
     ConfigModule.forRoot();
 
+    console.log('go for a new sessionId.')
+
     const {data} = await axios.post(process.env.base_url_tecnoback + '/get-session-id', {
       'usuario': process.env.usuario_api_tecnoback,
       'clave': process.env.clave_api_tecnoback
@@ -40,30 +42,44 @@ export class TecnobackApi {
     });
 
     GlobalService.sessionId = (data as any).session_id;
+    console.log('new sessionId ' + GlobalService.sessionId)
     return GlobalService.sessionId;
   }
 
   async emitir() {
-
+    console.log(1)
+    console.log(GlobalService.sessionId)
     ConfigModule.forRoot();
+    console.log(2)
+
+    
+
+
     //valido si existe session if
-    if(null == GlobalService.sessionId){
+    if(undefined == GlobalService.sessionId){
+        console.log('no session id')
         this.getSeassionId();
     }
     else{
+      console.log('sessionId ' + GlobalService.sessionId)
       const requestConfig: AxiosRequestConfig = {
         headers: {
           'x-api-key': process.env.apikey,
         }
       };
 
-      console.log(GlobalService.sessionId)
-      console.log(process.env.rut_emisor_tecnoback)
+      console.log('go to get boletas')
+      //console.log(GlobalService.sessionId)
+      //console.log(process.env.rut_emisor_tecnoback)
 
       //objtengo array de objetos 
       this.boletas = await getQueryBoletas();
 
       this.boletas.forEach(async function(b){
+
+        console.log(b);
+
+
           const {data} = await axios.post(process.env.base_url_tecnoback + '/emitir', {
             "session_id":GlobalService.sessionId,
             "RUTEmisor": process.env.rut_emisor_tecnoback,

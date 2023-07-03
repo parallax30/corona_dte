@@ -14,9 +14,9 @@ export declare class Boleta {
     ID_BOLETAS_CARGOS: number;
     ESTADO: number;
     ID_AVANCE: number;
-    FECHA_NOTIFICA_POSstring: any;
-    FECHA_NOTIFICA_SMSstring: any;
-    FECHA_NOTIFICA_EMAILstring: any;
+    FECHA_NOTIFICA_POS: any;
+    FECHA_NOTIFICA_SMS: any;
+    FECHA_NOTIFICA_EMAIL: any;
     EMAIL: string;
     TELEFONO_CELULAR: string;
     TIENDA: number;
@@ -33,7 +33,7 @@ export declare class Boleta {
     COMUNA_EMPRESA: string;
     CIUDAD_EMPRESA: string;
     HORA_TRANSACCION: string;
-    FECHA_TRANSACCIONstring: any;
+    FECHA_TRANSACCION: any;
     NOMBRE_CLIENTE: string;
     DIRECCION_CLIENTE: string;
     TIPO_TARJETA: string;

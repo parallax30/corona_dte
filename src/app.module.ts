@@ -11,7 +11,7 @@ import { TecnobackApi } from './tecnoback/api.service';
 @Module({
   imports: [ScheduleModule.forRoot(),
             HttpModule,
-            TransactionModule,
+            TransactionModule
           ],
   controllers: [AppController],
   providers: [AppService, CronService, TransactionService, TecnobackApi],
