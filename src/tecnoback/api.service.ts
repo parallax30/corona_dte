@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Observable, lastValueFrom, map } from 'rxjs';
-import { GlobalService } from 'src/global.service';
-import { Boleta } from 'src/transaction/model/boleta.model';
-import { getQueryBoletas, setUpdateBoleta, setInsertBoletaDoc} from 'src/transaction/transaction.oracle';
+import { GlobalService } from '../global.service';
+import { Boleta } from '../transaction/model/boleta.model';
+import { getQueryBoletas, setUpdateBoleta, setInsertBoletaDoc} from '../transaction/transaction.oracle';
 
 
 @Injectable()
@@ -68,10 +68,10 @@ export class TecnobackApi {
             "session_id":GlobalService.sessionId,
             "RUTEmisor": process.env.rut_emisor_tecnoback,
             "RznSocRecep":"",
-            "TipoDTE": "39", //no encontrado
-            "FchEmis": b.FECHA_TRANSACCION,  //"2023-01-17",
-            "RUTRecep": "66666666-6", //NO ENCONTRADO
-            "IndServicio":"3", //VALIDAR
+            "TipoDTE": "39", // CODGO DE BOLETA ELECTRONICA
+            "FchEmis": b.FECHA_TRANSACCION,  //"2023-01-17" OJO CON EL FORMATO,
+            "RUTRecep": "66666666-6", //NO ENCONTRADO VALOR POR DEFECTO. NO ESTÁ EN TABLA
+            "IndServicio":"2", //FACTURA DE OTROS SERVICIOS PERIÓDICOS
             "jsonDetalle": [
                 {
                     "NroLinDet": "1",
