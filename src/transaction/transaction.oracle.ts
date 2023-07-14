@@ -50,6 +50,56 @@ export const setUpdateBoleta = async (idBoletasCargos) => {
     });
 };
 
+export const setUpdateBoletaSP = async (idBoletasCargos) => {
+
+    console.log(idBoletasCargos);
+
+    ConfigModule.forRoot();
+    return oracledb.getConnection({
+        user: process.env.oracle_username,
+        password: process.env.oracle_password,
+        connectString: process.env.oracle_connection_string
+    })
+    .then(function (connection) {
+        var OracleQry = "EXEC clientes.servicios_boletas_cargos.SetActestadoEmisionBoleta (:0, 2)";
+        return connection.execute(OracleQry, [idBoletasCargos], { autoCommit: true })
+    .then(function (result) {
+        console.log('Update OK: ' + result.rowsAffected + ' rows. ')
+        connection.close();
+        return result.rows;
+    })
+    .catch(function (err) {
+        connection.close();
+        throw new Error(err.message);
+    });
+    });
+};
+
+export const setInsertBoletaDocSP = async (url_pdf, url_xml, Folio) => {
+
+    console.log(url_pdf);
+
+    ConfigModule.forRoot();
+    return oracledb.getConnection({
+        user: process.env.oracle_username,
+        password: process.env.oracle_password,
+        connectString: process.env.oracle_connection_string
+    })
+    .then(function (connection) {
+        var OracleQry = "EXEC clientes.servicios_boletas_cargos.SetActDocEmisionBoleta (:0, :1, :2)";
+        return connection.execute(OracleQry, [url_pdf, url_xml, Folio], { autoCommit: true }) //TODO: REVISAR COMPATIBILIDAD DE URL CON BLOB
+    .then(function (result) {
+        console.log('Update OK: ' + result.rowsAffected + ' rows. ')
+        connection.close();
+        return result.rows;
+    })
+    .catch(function (err) {
+        connection.close();
+        throw new Error(err.message);
+    });
+    });
+};
+
 export const setInsertBoletaDoc = async (idBoleta, folio, url) => {
     ConfigModule.forRoot();
     return oracledb.getConnection({
