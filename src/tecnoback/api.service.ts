@@ -115,7 +115,7 @@ export class TecnobackApi {
           });
 
           setUpdateBoleta(b.ID_BOLETAS_CARGOS);
-          setInsertBoletaDoc(b.ID_BOLETAS_CARGOS, data.folio, data.url)
+          setInsertBoletaDoc(b.ID_BOLETAS_CARGOS, data.Folio, data.url_pdf)
 
         }
         
