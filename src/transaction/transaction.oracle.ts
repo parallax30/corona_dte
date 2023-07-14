@@ -71,3 +71,26 @@ export const setInsertBoletaDoc = async (idBoleta, folio, url) => {
     });
     });
 };
+
+export const getBoletasPendientes= async (fechaDesde, fechaHasta) => {
+    ConfigModule.forRoot();
+    return oracledb.getConnection({
+        user: process.env.oracle_username,
+        password: process.env.oracle_password,
+        connectString: process.env.oracle_connection_string
+    })
+    .then(function (connection) {
+        var OracleQry = "EXEC clientes.servicios_boletas_cargos.CurCargosNoBoleteadosFechas (to_date(@0,'yyyyMMdd'),to_date(@1,'yyyyMMdd')) ";
+    
+        return connection.execute(OracleQry, [fechaDesde, fechaHasta])
+    .then(function (result) {
+        connection.close();
+        console.log('Procedure OK: ' + result.rowsAffected + ' rows. ')
+        return result.rows;
+    })
+    .catch(function (err) {
+        connection.close();
+        throw new Error(err.message);
+    });
+    });
+};

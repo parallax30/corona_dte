@@ -8,7 +8,7 @@ import { TecnobackApi } from '../tecnoback/api.service';
 export class CronService {
 
   constructor(
-    private readonly tecnobackApi: TecnobackApi,
+    private readonly tecnobackApi: TecnobackApi, emitirBoletasPendientes: TecnobackApi
   ) {}
 
   ;
@@ -22,6 +22,23 @@ export class CronService {
    //console.log(result);
   }
 
+  @Cron(CronExpression.EVERY_DAY_AT_2AM)
+  async emitirServiciosVolletasCargos() {
+    console.log('Comienza el proceso SP');
+
+    const fechaDesde = new Date()
+    const fechaHasta = new Date()
+
+    fechaDesde.setDate(fechaDesde.getDate() - 1);
+
+
+
+
+   const result = await this.tecnobackApi.emitirBoletasPendientes(formatDate(fechaDesde), formatDate(fechaHasta));
+   //console.log(result);
+  }
+
+  
   /*@Cron(CronExpression.EVERY_MINUTE)
   runEveryMinute() {
     console.log
@@ -34,4 +51,18 @@ export class CronService {
     const result = await this.tecnobackApi.getSeassionId();
     console.log(result);
   }*/
+}
+
+function formatDate(date) {
+  var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+  if (month.length < 2) 
+      month = '0' + month;
+  if (day.length < 2) 
+      day = '0' + day;
+
+  return [year, month, day].join();
 }
