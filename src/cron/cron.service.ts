@@ -13,15 +13,29 @@ export class CronService {
 
   ;
 
+  @Cron('*/30 * * * * *')
+  async emitirNC() {
+    console.log('Emitir NC');
 
-  @Cron('*/10 * * * * *')
-  async emitirBoletas() {
-    console.log('Comienza el proceso');
+    const fechaDesde = new Date()
+    const fechaHasta = new Date()
 
-   const result = await this.tecnobackApi.emitir();
+    fechaDesde.setDate(fechaDesde.getDate() - 1);
+
+   const result = await this.tecnobackApi.emitirNC(formatDate(fechaDesde), formatDate(fechaHasta));
    //console.log(result);
   }
 
+  
+  @Cron('*/10 * * * * *')
+  async emitirBoletas() {
+    console.log('Comienza el proceso de boletas');
+
+  const result = await this.tecnobackApi.emitir();
+   //console.log(result);
+  }
+
+ 
   @Cron(CronExpression.EVERY_DAY_AT_2AM)
   async emitirServiciosVolletasCargos() {
     console.log('Comienza el proceso SP');
@@ -31,10 +45,7 @@ export class CronService {
 
     fechaDesde.setDate(fechaDesde.getDate() - 1);
 
-
-
-
-   const result = await this.tecnobackApi.emitirBoletasPendientes(formatDate(fechaDesde), formatDate(fechaHasta));
+    const result = await this.tecnobackApi.emitirBoletasPendientes(formatDate(fechaDesde), formatDate(fechaHasta));
    //console.log(result);
   }
 
@@ -44,6 +55,7 @@ export class CronService {
     console.log
     ('Every minute');
   }
+  
 
   @Timeout(5000)
   async onceAfter5Seconds() {

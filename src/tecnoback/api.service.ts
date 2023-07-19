@@ -5,7 +5,8 @@ import { Observable, lastValueFrom, map } from 'rxjs';
 import { GlobalService } from '../global.service';
 import { Boleta } from '../transaction/model/boleta.model';
 import { BoletaSP } from '../transaction/model/boletaSP.model';
-import { getQueryBoletas, setUpdateBoleta, setInsertBoletaDoc, getBoletasPendientes, setUpdateBoletaSP, setInsertBoletaDocSP} from '../transaction/transaction.oracle';
+import { NotaDeCredito } from 'src/transaction/model/notaCredito.model';
+import { getQueryBoletas, setUpdateBoleta, setInsertBoletaDoc, getBoletasPendientes, setUpdateBoletaSP, setInsertBoletaDocSP, getNC} from '../transaction/transaction.oracle';
 
 
 @Injectable()
@@ -13,6 +14,7 @@ export class TecnobackApi {
   httpService: any; 
   boletas: Boleta[];
   boletasSP: BoletaSP[];
+  notasDeCredito: NotaDeCredito[];
 
   async test(){
 
@@ -199,6 +201,56 @@ export class TecnobackApi {
 
           setUpdateBoletaSP(b.id_boletas_cargos);
           setInsertBoletaDocSP(data.url_pdf, data.url_xml, data.Folio)
+
+        }
+      )
+      console.log();
+    }
+  }
+
+  async emitirNC(fechaDesde, fechaHasta) {
+    
+    console.log(GlobalService.sessionId)
+    ConfigModule.forRoot();
+
+    //valido si existe session if
+    if(undefined == GlobalService.sessionId){
+        console.log('no session id')
+        this.getSeassionId();
+    }
+    else{
+      //console.log('sessionId ' + GlobalService.sessionId)
+      const requestConfig: AxiosRequestConfig = {
+        headers: {
+          'x-api-key': process.env.apikey,
+        }
+      };
+
+      console.log('go to get NC')
+      
+      //objtengo array de objetos 
+      this.notasDeCredito = await getNC(fechaDesde, fechaHasta);  //TODO: PENDIENTE CREAR MODELO Y ARMAR JSON DE ENTRADA
+
+      this.notasDeCredito.forEach(async function(b){
+
+        //LE AGREGO LO QUE LE FALTA A LOS DATOS QUE VIENEN DESDE BD CON LOS DATOS NECESARIOS PARA TECNOBACK
+        b["session_id"] = GlobalService.sessionId;
+        b["RUTEmisor"] = process.env.rut_emisor_tecnoback;
+        b["Nombre_impresora"] =  "priPrinter";
+        b["TipoDTE"] =  "61"; //NC
+
+        console.log(b);
+          const {data} = await axios.post(process.env.base_url_tecnoback + '/emitir', b, {
+              headers: {
+                'x-api-key': process.env.apikey_tecnoback,
+              }
+          });
+
+          console.log(data);
+
+          // ACTUALIZAR FUENTE DE INFORMACION
+          //setUpdateBoletaSP(b.id_boletas_cargos);
+          //setInsertBoletaDocSP(data.url_pdf, data.url_xml, data.Folio)
 
         }
         

@@ -14,13 +14,23 @@ const common_1 = require("@nestjs/common");
 const schedule_1 = require("@nestjs/schedule");
 const api_service_1 = require("../tecnoback/api.service");
 let CronService = exports.CronService = class CronService {
-    constructor(tecnobackApi) {
+    constructor(tecnobackApi, emitirBoletasPendientes) {
         this.tecnobackApi = tecnobackApi;
     }
     ;
-    async emitirBoletas() {
-        console.log('Comienza el proceso');
-        const result = await this.tecnobackApi.emitir();
+    async emitirNC() {
+        console.log('Emitir NC');
+        const fechaDesde = new Date();
+        const fechaHasta = new Date();
+        fechaDesde.setDate(fechaDesde.getDate() - 1);
+        const result = await this.tecnobackApi.emitirNC(formatDate(fechaDesde), formatDate(fechaHasta));
+    }
+    async emitirServiciosVolletasCargos() {
+        console.log('Comienza el proceso SP');
+        const fechaDesde = new Date();
+        const fechaHasta = new Date();
+        fechaDesde.setDate(fechaDesde.getDate() - 1);
+        const result = await this.tecnobackApi.emitirBoletasPendientes(formatDate(fechaDesde), formatDate(fechaHasta));
     }
 };
 __decorate([
@@ -28,9 +38,23 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], CronService.prototype, "emitirBoletas", null);
+], CronService.prototype, "emitirNC", null);
+__decorate([
+    (0, schedule_1.Cron)(schedule_1.CronExpression.EVERY_DAY_AT_2AM),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], CronService.prototype, "emitirServiciosVolletasCargos", null);
 exports.CronService = CronService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [api_service_1.TecnobackApi])
+    __metadata("design:paramtypes", [api_service_1.TecnobackApi, api_service_1.TecnobackApi])
 ], CronService);
+function formatDate(date) {
+    var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear();
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+    return [year, month, day].join();
+}
 //# sourceMappingURL=cron.service.js.map

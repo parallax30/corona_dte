@@ -1,3 +1,45 @@
 export declare const getQueryBoletas: () => Promise<any>;
 export declare const setUpdateBoleta: (idBoletasCargos: any) => Promise<any>;
+export declare const setUpdateBoletaSP: (idBoletasCargos: any) => Promise<any>;
+export declare const setInsertBoletaDocSP: (url_pdf: any, url_xml: any, Folio: any) => Promise<any>;
 export declare const setInsertBoletaDoc: (idBoleta: any, folio: any, url: any) => Promise<any>;
+export declare const getBoletasPendientes: (fechaDesde: any, fechaHasta: any) => Promise<any>;
+export declare const getNC: (fechaDesde: any, fechaHasta: any) => Promise<{
+    Acteco: string;
+    FchEmis: string;
+    RUTRecep: string;
+    RznSocRecep: string;
+    GiroRecep: string;
+    DirRecep: string;
+    CmnaRecep: string;
+    CiudadRecep: string;
+    boletaTiposerv: string;
+    jsonDetalle: {
+        NroLinDet: string;
+        VlrCodigo: string;
+        TpoCodigo: string;
+        NmbItem: string;
+        QtyItem: string;
+        UnmdItem: string;
+        PrcItem: string;
+        DescuentoPct: string;
+        DescuentoMonto: string;
+        MontoItem: string;
+        DscItem: string;
+        CodItem: string;
+        RUTmandante: string;
+    }[];
+    jsonReferencias: {
+        TpoDocRef: string;
+        FolioRef: string;
+        FchRef: string;
+        NroLinRef: string;
+        RazonRef: string;
+        CodRef: string;
+    }[];
+    MntExe: string;
+    IVA: string;
+    MntNeto: string;
+    MntTotal: string;
+    mail_mandato: string;
+}[]>;

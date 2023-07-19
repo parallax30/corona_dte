@@ -144,3 +144,67 @@ export const getBoletasPendientes= async (fechaDesde, fechaHasta) => {
     });
     });
 };
+
+export const getNC = async (fechaDesde, fechaHasta) => {
+    
+    const jsonNC = [{
+        "Acteco":"123",
+        "FchEmis": "2023-01-17",
+        "RUTRecep": "77486703-1",
+        "RznSocRecep": "Nombre Empresa de Prueba",
+        "GiroRecep": "Giro Empresa de Prueba",
+        "DirRecep": "Dir Empresa de Prueba",
+        "CmnaRecep": "Providencia",
+        "CiudadRecep": "Santiago",
+        "boletaTiposerv": "3",
+        "jsonDetalle": [
+            {
+                "NroLinDet": "1",
+                "VlrCodigo": "1",
+                "TpoCodigo": "1",
+                "NmbItem": "Manzanas",
+                "QtyItem": "1",
+                "UnmdItem": "UNI",
+                "PrcItem": "1000",
+                "DescuentoPct": "",
+                "DescuentoMonto": "",
+                "MontoItem": "1000",
+                "DscItem": "Verdes",
+                "CodItem": "",
+                "RUTmandante": ""
+            },
+            {
+                "NroLinDet": "1",
+                "VlrCodigo": "1",
+                "TpoCodigo": "1",
+                "NmbItem": "Peras",
+                "QtyItem": "2",
+                "UnmdItem": "UNI",
+                "PrcItem": "1000",
+                "DescuentoPct": "",
+                "DescuentoMonto": "",
+                "MontoItem": "2000",
+                "DscItem": "Verdes",
+                "CodItem": "",
+                "RUTmandante": ""
+            }
+        ],
+        "jsonReferencias": [
+            {
+                "TpoDocRef": "39",
+                "FolioRef": "123",
+                "FchRef": "2023-01-19",
+                "NroLinRef": "1",
+                "RazonRef": "XXX",
+                "CodRef": "1"
+            }
+        ],
+        "MntExe": "0",
+        "IVA": "479",
+        "MntNeto": "2521",
+        "MntTotal": "3000",
+        "mail_mandato": "contacto@tecnoback.cl"
+    }]
+
+    return jsonNC;
+};
