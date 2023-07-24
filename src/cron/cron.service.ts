@@ -36,7 +36,7 @@ export class CronService {
   }
 
  
-  @Cron(CronExpression.EVERY_DAY_AT_2AM)
+  @Cron(CronExpression.EVERY_DAY_AT_2AM)  
   async emitirServiciosVolletasCargos() {
     console.log('Comienza el proceso SP');
 
