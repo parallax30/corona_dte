@@ -37,7 +37,7 @@ export class CronService {
 
  
   @Cron(CronExpression.EVERY_DAY_AT_2AM)  
-  async emitirServiciosVolletasCargos() {
+  async emitirServiciosBoletasCargos() {
     console.log('Comienza el proceso SP');
 
     const fechaDesde = new Date()
